@@ -27,7 +27,6 @@ async function createEmployeeService(data) {
 
 async function getEmployeesService(page , limit) {
     const offset = (page - 1) * limit;
-    console.log("offset" , offset)
     const [employees] = await pool.execute(
         `
         SELECT id, fullName, jobTitle, country, salary, active
@@ -36,8 +35,6 @@ async function getEmployeesService(page , limit) {
         LIMIT ${Number(limit)} OFFSET ${Number(offset)}
         `
     );
-    console.log(limit , "limit")
-    console.log(employees ,"++++employees")
     return employees;
 }
 
@@ -99,11 +96,9 @@ async function getMaxSalaryService(filters = {}) {
         query += ` AND jobTitle = ?`;
         values.push(filters.jobTitle);
     }
-    console.log(values ,"values")
-    console.log(query ,"query")
-
+    
     const [rows] = await pool.execute(query, values);
-    console.log(rows ,"rows")
+   
     return {
         maxSalary: Number(rows[0]?.maxSalary ?? 0)
     };
@@ -129,11 +124,9 @@ async function getMinSalaryService(filters = {}) {
         query += ` AND jobTitle = ?`;
         values.push(filters.jobTitle);
     }
-    console.log(values ,"values")
-    console.log(query ,"query")
 
     const [rows] = await pool.execute(query, values);
-    console.log(rows ,"rows")
+    
     return {
         minSalary: Number(rows[0]?.minSalary ?? 0)
     };
