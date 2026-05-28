@@ -326,6 +326,145 @@ describe('Employee API', () => {
         expect(response.statusCode).toBe(200);
         expect(response.body.minSalary).toBe(50000);
     });
+     test('GET /employees/minSalary should return min salary with country filters', async () => {
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'A',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 50000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'B',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 90000
+            });
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'C',
+                jobTitle: 'SDE',
+                country: 'USA',
+                salary: 100000
+        });
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'D',
+                jobTitle: 'SDET',
+                country: 'INDIA',
+                salary: 40000
+            });
+
+        const response = await request(app)
+            .get('/employees/minSalary')
+            .query({
+                country: 'INDIA'
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.minSalary).toBe(40000);
+    });
+
+    test('GET /employees/minSalary should return min salary with jobTitle filter only', async () => {
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'A',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 30000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'B',
+                jobTitle: 'SDE',
+                country: 'USA',
+                salary: 90000
+            });
+         await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'B',
+                jobTitle: 'SDET',
+                country: 'USA',
+                salary: 40000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'C',
+                jobTitle: 'SDET',
+                country: 'India',
+                salary: 100000
+            });
+
+        const response = await request(app)
+            .get('/employees/minSalary')
+            .query({
+                jobTitle: 'SDE'
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.minSalary).toBe(30000);
+    });
+
+    test('GET /employees/minSalary should return min salary with country and jobTitle filters', async () => {
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'A',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 20000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'B',
+                jobTitle: 'SDE',
+                country: 'USA',
+                salary: 90000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'C',
+                jobTitle: 'SDET',
+                country: 'India',
+                salary: 100000
+            });
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'D',
+                jobTitle: 'SDET',
+                country: 'India',
+                salary: 30000
+            });
+
+        const response = await request(app)
+            .get('/employees/minSalary')
+            .query({
+                country: 'India',
+                jobTitle: 'SDE'
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.minSalary).toBe(20000);
+    });
 
     
     
