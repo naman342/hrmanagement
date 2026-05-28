@@ -132,11 +132,31 @@ async function getMinSalaryService(filters = {}) {
     };
 }
 
+async function getEmployeeService(id) {
+
+    const [rows] = await pool.execute(
+        `
+        SELECT
+            id,
+            fullName,
+            jobTitle,
+            country,
+            salary,
+            active
+        FROM employees
+        WHERE id = ?
+        `,
+        [id]
+    );
+
+    return rows[0];
+}
 module.exports = {
     createEmployeeService,
     getAllEmployeesService,
     updateEmployeeService,
     deleteEmployeeService,
     getMaxSalaryService,
-    getMinSalaryService
+    getMinSalaryService,
+    getEmployeeService
 };

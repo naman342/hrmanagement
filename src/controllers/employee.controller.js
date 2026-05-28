@@ -8,7 +8,8 @@ const {
     updateEmployeeService,
     deleteEmployeeService,
     getMaxSalaryService,
-    getMinSalaryService
+    getMinSalaryService,
+    getEmployeeService
 } = require('../services/employee.service');
 
 async function createEmployee(req, res) {
@@ -45,12 +46,22 @@ async function createEmployee(req, res) {
 }
 
 async function getEmployee(req, res) {
+    const { id } = req.params;
+
+    const employee = await getEmployeeService(id);
+
+    if (!employee) {
+
+        return res.status(404).json({
+            message: 'Employee not found'
+        });
+
+    }
+
     return res.status(200).json({
-        fullName: 'Shreyansh',
-        jobTitle: 'Software Engineer',
-        country: 'India',
-        salary: 50000
-    })
+        ...employee,
+        salary: Number(employee.salary)
+    });
 }
 
 async function  getAllEmployees(req, res) {
