@@ -25,7 +25,7 @@ async function createEmployeeService(data) {
     };
 }
 
-async function getEmployeesService(page , limit) {
+async function getAllEmployeesService(page , limit) {
     const offset = (page - 1) * limit;
     const [employees] = await pool.execute(
         `
@@ -134,7 +134,7 @@ async function getMinSalaryService(filters = {}) {
 
 module.exports = {
     createEmployeeService,
-    getEmployeesService,
+    getAllEmployeesService,
     updateEmployeeService,
     deleteEmployeeService,
     getMaxSalaryService,

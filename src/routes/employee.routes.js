@@ -3,10 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    createEmployee, getEmployees, updateEmployee, deleteEmployee, maxSalary, minSalary
+    createEmployee, getAllEmployees, updateEmployee, deleteEmployee, maxSalary, minSalary
 } = require('../controllers/employee.controller');
 
-router.get('/', getEmployees);
+router.get('/getAllEmployees', getAllEmployees);
 router.post('/', createEmployee);
 router.patch('/:id/salary', updateEmployee);
 router.delete('/:id', deleteEmployee);
