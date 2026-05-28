@@ -414,7 +414,7 @@ describe('Employee API', () => {
             .query({
                 jobTitle: 'SDE'
             });
-
+console.log(response ,"++++response")
         expect(response.statusCode).toBe(200);
         expect(response.body.minSalary).toBe(30000);
     });

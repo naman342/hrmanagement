@@ -112,11 +112,42 @@ async function getMaxSalaryService(filters = {}) {
         maxSalary: Number(rows[0]?.maxSalary ?? 0)
     };
 }
+async function getMinSalaryService(filters = {}) {
+
+    let query = `
+        SELECT MIN(salary) AS minSalary
+        FROM employees
+        WHERE 1=1
+    `;
+
+    const values = [];
+
+    // optional filter: country
+    if (filters.country) {
+        query += ` AND country = ?`;
+        values.push(filters.country);
+    }
+
+    // optional filter: jobTitle
+    if (filters.jobTitle) {
+        query += ` AND jobTitle = ?`;
+        values.push(filters.jobTitle);
+    }
+    console.log(values ,"values")
+    console.log(query ,"query")
+
+    const [rows] = await pool.execute(query, values);
+    console.log(rows ,"rows")
+    return {
+        minSalary: Number(rows[0]?.minSalary ?? 0)
+    };
+}
 
 module.exports = {
     createEmployeeService,
     getEmployeesService,
     updateEmployeeService,
     deleteEmployeeService,
-    getMaxSalaryService
+    getMaxSalaryService,
+    getMinSalaryService
 };
