@@ -326,7 +326,7 @@ describe('Employee API', () => {
         expect(response.statusCode).toBe(200);
         expect(response.body.minSalary).toBe(50000);
     });
-     test('GET /employees/minSalary should return min salary with country filters', async () => {
+    test('GET /employees/minSalary should return min salary with country filters', async () => {
 
         await request(app)
             .post('/employees')
@@ -466,7 +466,7 @@ describe('Employee API', () => {
         expect(response.body.minSalary).toBe(20000);
     });
 
-    test('GET /employees should return paginated results', async () => {
+    test('GET /employees/getAllEmployees should return paginated results', async () => {
 
     // seed 5 employees
     for (let i = 1; i <= 5; i++) {
@@ -491,6 +491,31 @@ describe('Employee API', () => {
 
     expect(response.body.length).toBe(2);
     }); 
+    
+    test('GET /employees/:id should return data for a user', async() =>{
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'Shreyansh',
+                jobTitle: 'Software Engineer',
+                country: 'India',
+                salary: 50000
+        });
+
+        const employeeId =
+        createResponse.body.id;
+
+        const response = await request(app)
+            .get(`/employees/${employeeId}`);
+
+
+        expect(response.statusCode).toBe(200);
+        expect(response.fullName)
+            .toBe('Shreyansh');
+        expect(response.salary).toBe(50000);
+        expect(response.country).toBe('India');
+        expect(response.jobTitle).toBe('Software Engineer');
+    })
     
 });
 
