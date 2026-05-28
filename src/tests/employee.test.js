@@ -493,7 +493,7 @@ describe('Employee API', () => {
     }); 
     
     test('GET /employees/:id should return data for a employee', async() =>{
-        await request(app)
+        const createResponse = await request(app)
             .post('/employees')
             .send({
                 fullName: 'Shreyansh',
@@ -510,11 +510,11 @@ describe('Employee API', () => {
 
 
         expect(response.statusCode).toBe(200);
-        expect(response.fullName)
+        expect(response.body.fullName)
             .toBe('Shreyansh');
-        expect(response.salary).toBe(50000);
-        expect(response.country).toBe('India');
-        expect(response.jobTitle).toBe('Software Engineer');
+        expect(response.body.salary).toBe(50000);
+        expect(response.body.country).toBe('India');
+        expect(response.body.jobTitle).toBe('Software Engineer');
     })
     
 });

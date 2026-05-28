@@ -44,6 +44,15 @@ async function createEmployee(req, res) {
 
 }
 
+async function getEmployee(req, res) {
+    return res.status(200).json({
+        fullName: 'Shreyansh',
+        jobTitle: 'Software Engineer',
+        country: 'India',
+        salary: 50000
+    })
+}
+
 async function  getAllEmployees(req, res) {
 
     const page = Number(req.query.page) || 1;
@@ -131,6 +140,7 @@ async function minSalary(req, res) {
 module.exports = {
     createEmployee,
     getAllEmployees,
+    getEmployee,
     updateEmployee,
     deleteEmployee,
     maxSalary,
