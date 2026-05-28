@@ -7,7 +7,6 @@ const {
 } = require('../controllers/employee.controller');
 
 router.get('/', getEmployees);
-
 router.post('/', createEmployee);
 router.patch('/:id/salary', updateEmployee);
 router.delete('/:id', deleteEmployee);

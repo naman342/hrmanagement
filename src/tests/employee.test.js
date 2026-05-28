@@ -466,7 +466,31 @@ console.log(response ,"++++response")
         expect(response.body.minSalary).toBe(20000);
     });
 
-    
+    test('GET /employees should return paginated results', async () => {
+
+    // seed 5 employees
+    for (let i = 1; i <= 5; i++) {
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: `User${i}`,
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 50000 + i
+            });
+    }
+
+    const response = await request(app)
+        .get('/employees')
+        .query({
+            page: 1,
+            limit: 2
+        });
+
+    expect(response.statusCode).toBe(200);
+
+    expect(response.body.length).toBe(2);
+    }); 
     
 });
 
