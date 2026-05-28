@@ -39,7 +39,6 @@ describe('Employee API', () => {
             .toBe('Naman');
 
     });
-
     test('POST /employees should create employee', async () => {
 
         const response = await request(app)
@@ -292,7 +291,43 @@ describe('Employee API', () => {
         expect(response.body.maxSalary).toBe(90000);
     });
 
-    
+     test('GET /employees/minSalary should return min salary without any filters', async () => {
 
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'A',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 50000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'B',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 90000
+            });
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'C',
+                jobTitle: 'SDE',
+                country: 'USA',
+                salary: 100000
+        });
+
+        const response = await request(app)
+            .get('/employees/maxSalary')
+            .query();
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.maxSalary).toBe(50000);
+    });
+
+    
+    
 });
 
