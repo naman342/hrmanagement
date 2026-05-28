@@ -1,3 +1,4 @@
+const {pool} = require('../config/mysql.connection');
 const {
     employeeSchema
 } = require('../validators/employee.validator');
@@ -19,10 +20,22 @@ async function createEmployee(req, res) {
 
         }
 
-        const employee = {
-            id: Date.now(),
-            ...req.body
-        };
+        const {
+            fullName,
+            jobTitle,
+            country,
+            salary
+        } = req.body;
+
+        const employee = await pool.execute(
+            `
+            INSERT INTO employees
+            (full_name, job_title, country, salary)
+            VALUES (?, ?, ?, ?)
+            `,
+            [fullName, jobTitle, country, salary]
+        );
+        
 
         res.status(201).json(employee);
 
@@ -38,6 +51,27 @@ async function createEmployee(req, res) {
 
 }
 
+async function  getEmployees(req, res) {
+
+    const [employees] = await pool.execute(
+    `
+    SELECT
+        id,
+        full_name,
+        job_title,
+        country,
+        salary,
+        created_at
+    FROM employees
+    LIMIT 10
+    `
+);
+
+console.log(employees ,"naman")
+    return res.status(200).json(employees);
+};
+
 module.exports = {
-    createEmployee
+    createEmployee,
+    getEmployees
 };

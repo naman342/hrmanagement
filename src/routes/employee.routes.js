@@ -3,16 +3,10 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    createEmployee
+    createEmployee, getEmployees
 } = require('../controllers/employee.controller');
 
-router.get('/', (req, res) => {
-
-    res.json({
-        message: 'Employee route working'
-    });
-
-});
+router.get('/', getEmployees);
 
 router.post('/', createEmployee);
 
