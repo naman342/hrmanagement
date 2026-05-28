@@ -10,4 +10,10 @@ router.get('/', (req, res) => {
 
 });
 
+router.post('/', (req, res) => {
+
+    res.status(201).json(req.body);
+
+});
+
 module.exports = router;
