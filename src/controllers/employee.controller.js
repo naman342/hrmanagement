@@ -4,7 +4,8 @@ const {
 
 const {
     createEmployeeService,
-    getEmployeesService
+    getEmployeesService,
+    updateEmployeeService
 } = require('../services/employee.service');
 
 async function createEmployee(req, res) {
@@ -48,7 +49,36 @@ async function  getEmployees(req, res) {
     return res.status(200).json(employees);
 };
 
+async function updateEmployee(req, res) {
+
+    try {
+        const { id } = req.params;
+        const { salary } = req.body;
+        const updatedEmployee =
+            await updateEmployeeService(
+                id,
+                salary
+            );
+
+        return res.status(200).json({
+                ...updatedEmployee,
+                salary: Number(updatedEmployee.salary)
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        return res.status(500).json({
+            message: 'Internal server error'
+        });
+
+    }
+
+}
+
 module.exports = {
     createEmployee,
-    getEmployees
+    getEmployees,
+    updateEmployee,
 };

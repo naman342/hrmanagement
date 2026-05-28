@@ -44,7 +44,22 @@ async function getEmployeesService() {
     return employees;
 }
 
+async function updateEmployeeService(id, salary) {
+
+    await pool.execute(
+        `UPDATE employees SET salary = ? WHERE id = ?`,
+        [salary, id]
+    );
+
+    const [rows] = await pool.execute(
+        `SELECT id, fullName, jobTitle, country, salary FROM employees WHERE id = ?`,
+        [id]
+    );
+
+    return rows[0];
+}
 module.exports = {
     createEmployeeService,
-    getEmployeesService
+    getEmployeesService,
+    updateEmployeeService
 };
