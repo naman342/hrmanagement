@@ -517,36 +517,12 @@ describe('Employee API', () => {
         expect(response.body.jobTitle).toBe('Software Engineer');
     })
 
-    test('GET /employees/:id should return data for a employee', async() =>{
-        const createResponse = await request(app)
-            .post('/employees')
-            .send({
-                fullName: 'Shreyansh',
-                jobTitle: 'Software Engineer',
-                country: 'India',
-                salary: 50000
-        });
-
-        const employeeId =
-        createResponse.body.id;
-
-        const response = await request(app)
-            .get(`/employees/${employeeId}`);
-
-
-        expect(response.statusCode).toBe(200);
-        expect(response.body.fullName)
-            .toBe('Shreyansh');
-        expect(response.body.salary).toBe(50000);
-        expect(response.body.country).toBe('India');
-        expect(response.body.jobTitle).toBe('Software Engineer');
-    })
-    test('GET /employees/:id should return 404 if employee not found', async () => {
+    test('GET /employees/:id should return 404 if employee not found', async () =>{
 
         const id = Date.now() + 99999
+        console.log("id test", id)
         const response = await request(app)
-            .get('/employees/${id}');
-
+            .get(`/employees/${id}`);
         expect(response.statusCode).toBe(404);
 
         expect(response.body.message)
