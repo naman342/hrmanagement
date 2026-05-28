@@ -6,7 +6,8 @@ const {
     createEmployeeService,
     getEmployeesService,
     updateEmployeeService,
-    deleteEmployeeService
+    deleteEmployeeService,
+    getMaxSalaryService
 } = require('../services/employee.service');
 
 async function createEmployee(req, res) {
@@ -102,7 +103,15 @@ async function deleteEmployee(req, res) {
 }
 
 async function maxSalary(req, res) {
-     return res.status(200).json({maxSalary: 90000});
+     const { country, jobTitle } = req.query;
+
+    const result =
+        await getMaxSalaryService({
+            country,
+            jobTitle
+        });
+
+    return res.status(200).json(result);
 }
 module.exports = {
     createEmployee,

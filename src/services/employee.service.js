@@ -82,9 +82,41 @@ async function deleteEmployeeService(id) {
     return rows[0];
 }
 
+async function getMaxSalaryService(filters = {}) {
+
+    let query = `
+        SELECT MAX(salary) AS maxSalary
+        FROM employees
+        WHERE 1=1
+    `;
+
+    const values = [];
+
+    // optional filter: country
+    if (filters.country) {
+        query += ` AND country = ?`;
+        values.push(filters.country);
+    }
+
+    // optional filter: jobTitle
+    if (filters.jobTitle) {
+        query += ` AND jobTitle = ?`;
+        values.push(filters.jobTitle);
+    }
+    console.log(values ,"values")
+    console.log(query ,"query")
+
+    const [rows] = await pool.execute(query, values);
+    console.log(rows ,"rows")
+    return {
+        maxSalary: Number(rows[0]?.maxSalary ?? 0)
+    };
+}
+
 module.exports = {
     createEmployeeService,
     getEmployeesService,
     updateEmployeeService,
-    deleteEmployeeService
+    deleteEmployeeService,
+    getMaxSalaryService
 };
