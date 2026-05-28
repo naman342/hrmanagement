@@ -3,18 +3,29 @@ const request = require('supertest');
 const app = require('../../app');
 
 describe('Employee API', () => {
+    test('GET /employees should return employees', async () => {
 
-    test('GET /employees should work', async () => {
+    await request(app)
+        .post('/employees')
+        .send({
+            fullName: 'Naman',
+            jobTitle: 'Software Engineer',
+            country: 'India',
+            salary: 50000
+        });
 
-        const response =
-            await request(app).get('/employees');
+    const response =
+        await request(app).get('/employees');
 
-        expect(response.statusCode).toBe(200);
-        expect(response.body.length)
-        .toBeGreaterThan(0);
-        console.log(response)
+    expect(response.statusCode).toBe(200);
 
-    });
+    expect(response.body.length)
+        .toBe(1);
+
+    expect(response.body[0].fullName)
+        .toBe('Naman');
+
+});
 
     test('POST /employees should create employee', async () => {
 
