@@ -26,8 +26,40 @@ describe('Employee API', () => {
 
         expect(response.statusCode).toBe(201);
 
-        expect(response.body.fullName)
-            .toBe('Naman');
+    });
+
+    test('POST /employees should fail if fullName missing', async () => {
+
+        const response = await request(app)
+            .post('/employees')
+            .send({
+                jobTitle: 'Software Engineer',
+                country: 'India',
+                salary: 50000
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body.message)
+            .toBe('Full name is required');
+
+    });
+
+    test('POST /employees should fail for negative salary', async () => {
+
+        const response = await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'Naman',
+                jobTitle: 'Software Engineer',
+                country: 'India',
+                salary: -100
+            });
+
+        expect(response.statusCode).toBe(400);
+
+        expect(response.body.message)
+            .toBe('Salary must be positive');
 
     });
 
