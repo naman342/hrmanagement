@@ -113,10 +113,16 @@ async function maxSalary(req, res) {
 
     return res.status(200).json(result);
 }
+
+async function minSalary(req, res) {
+
+    return res.status(200).json({minSalary: 50000});
+}
 module.exports = {
     createEmployee,
     getEmployees,
     updateEmployee,
     deleteEmployee,
-    maxSalary
+    maxSalary,
+    minSalary
 };
