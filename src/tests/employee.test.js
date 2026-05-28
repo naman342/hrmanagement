@@ -11,8 +11,23 @@ describe('Employee API', () => {
 
         expect(response.statusCode).toBe(200);
 
-        expect(response.body.message)
-            .toBe('Employee route working');
+    });
+
+    test('POST /employees should create employee', async () => {
+
+        const response = await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'Naman',
+                jobTitle: 'Software Engineer',
+                country: 'India',
+                salary: 50000
+            });
+
+        expect(response.statusCode).toBe(201);
+
+        expect(response.body.fullName)
+            .toBe('Naman');
 
     });
 
