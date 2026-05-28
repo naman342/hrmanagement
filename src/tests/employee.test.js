@@ -492,7 +492,7 @@ describe('Employee API', () => {
     expect(response.body.length).toBe(2);
     }); 
     
-    test('GET /employees/:id should return data for a user', async() =>{
+    test('GET /employees/:id should return data for a employee', async() =>{
         await request(app)
             .post('/employees')
             .send({
