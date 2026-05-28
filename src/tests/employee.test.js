@@ -161,7 +161,7 @@ describe('Employee API', () => {
             });
 
         const response = await request(app)
-            .get('/employees/salary/max')
+            .get('/employees/maxSalary')
             .query();
 
     expect(response.statusCode).toBe(200);

@@ -101,9 +101,13 @@ async function deleteEmployee(req, res) {
 
 }
 
+async function maxSalary(req, res) {
+     return res.status(200).json({maxSalary: 90000});
+}
 module.exports = {
     createEmployee,
     getEmployees,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
+    maxSalary
 };
