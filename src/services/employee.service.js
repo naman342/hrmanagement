@@ -25,23 +25,19 @@ async function createEmployeeService(data) {
     };
 }
 
-async function getEmployeesService() {
-
+async function getEmployeesService(page , limit) {
+    const offset = (page - 1) * limit;
+    console.log("offset" , offset)
     const [employees] = await pool.execute(
         `
-        SELECT
-            id,
-            fullName,
-            jobTitle,
-            country,
-            salary,
-            created_at,
-            active
+        SELECT id, fullName, jobTitle, country, salary, active
         FROM employees
-        LIMIT 10
+        WHERE active = 1
+        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
         `
     );
-
+    console.log(limit , "limit")
+    console.log(employees ,"++++employees")
     return employees;
 }
 
