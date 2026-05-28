@@ -35,7 +35,8 @@ async function getEmployeesService() {
             jobTitle,
             country,
             salary,
-            created_at
+            created_at,
+            active
         FROM employees
         LIMIT 10
         `
@@ -58,8 +59,32 @@ async function updateEmployeeService(id, salary) {
 
     return rows[0];
 }
+
+async function deleteEmployeeService(id) {
+     await pool.execute(
+        `
+        UPDATE employees
+        SET active = false
+        WHERE id = ?
+        `,
+        [id]
+    );
+
+    const [rows] = await pool.execute(
+        `
+        SELECT id, fullName, jobTitle, country, salary, active
+        FROM employees
+        WHERE id = ?
+        `,
+        [id]
+    );
+
+    return rows[0];
+}
+
 module.exports = {
     createEmployeeService,
     getEmployeesService,
-    updateEmployeeService
+    updateEmployeeService,
+    deleteEmployeeService
 };
