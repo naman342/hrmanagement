@@ -116,4 +116,27 @@ describe('Employee API', () => {
             .toBe(90000);
 
     });
+
+    test('DELETE /employees/:id should mark employee inactive', async () => {
+
+    const createResponse = await request(app)
+        .post('/employees')
+        .send({
+            fullName: 'Naman',
+            jobTitle: 'SDE',
+            country: 'India',
+            salary: 50000
+        });
+
+    const id = createResponse.body.id;
+
+    const deleteResponse = await request(app)
+        .delete(`/employees/${id}`);
+
+    expect(deleteResponse.statusCode)
+        .toBe(200);
+
+    expect(deleteResponse.body.active)
+        .toBe(0);
+    });
 });
