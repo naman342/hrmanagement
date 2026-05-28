@@ -2,6 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
+const {
+    createEmployee
+} = require('../controllers/employee.controller');
+
 router.get('/', (req, res) => {
 
     res.json({
@@ -10,10 +14,6 @@ router.get('/', (req, res) => {
 
 });
 
-router.post('/', (req, res) => {
-
-    res.status(201).json(req.body);
-
-});
+router.post('/', createEmployee);
 
 module.exports = router;
