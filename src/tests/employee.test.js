@@ -10,6 +10,9 @@ describe('Employee API', () => {
             await request(app).get('/employees');
 
         expect(response.statusCode).toBe(200);
+        expect(response.body.length)
+        .toBeGreaterThan(0);
+        console.log(response)
 
     });
 
@@ -62,5 +65,4 @@ describe('Employee API', () => {
             .toBe('Salary must be positive');
 
     });
-
 });
