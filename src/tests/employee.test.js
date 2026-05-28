@@ -291,7 +291,7 @@ describe('Employee API', () => {
         expect(response.body.maxSalary).toBe(90000);
     });
 
-     test('GET /employees/minSalary should return min salary without any filters', async () => {
+    test('GET /employees/minSalary should return min salary without any filters', async () => {
 
         await request(app)
             .post('/employees')
@@ -320,11 +320,11 @@ describe('Employee API', () => {
         });
 
         const response = await request(app)
-            .get('/employees/maxSalary')
+            .get('/employees/minSalary')
             .query();
 
         expect(response.statusCode).toBe(200);
-        expect(response.body.maxSalary).toBe(50000);
+        expect(response.body.minSalary).toBe(50000);
     });
 
     
