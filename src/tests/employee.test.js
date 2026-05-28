@@ -17,7 +17,7 @@ describe('Employee API', () => {
         await pool.end();
 
     });
-    test('GET /employees should return employees', async () => {
+    test('GET /employees/getAllEmployees should return employees', async () => {
         await request(app)
             .post('/employees')
             .send({
@@ -28,7 +28,7 @@ describe('Employee API', () => {
             });
 
         const response =
-            await request(app).get('/employees');
+            await request(app).get('/employees/getAllEmployees');
 
         expect(response.statusCode).toBe(200);
 
@@ -481,7 +481,7 @@ describe('Employee API', () => {
     }
 
     const response = await request(app)
-        .get('/employees')
+        .get('/employees/getAllEmployees')
         .query({
             page: 1,
             limit: 2
