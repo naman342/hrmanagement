@@ -89,4 +89,31 @@ describe('Employee API', () => {
             .toBe('Salary must be positive');
 
     });
+
+    test('PATCH /employees/:id/salary should update salary', async () => {
+        const createResponse = await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'Naman',
+                jobTitle: 'Software Engineer',
+                country: 'India',
+                salary: 50000
+            });
+
+        const employeeId =
+            createResponse.body.id;
+
+        const updateResponse = await request(app)
+            .patch(`/employees/${employeeId}/salary`)
+            .send({
+                salary: 90000
+            });
+
+        expect(updateResponse.statusCode)
+            .toBe(200);
+
+        expect(updateResponse.body.salary)
+            .toBe(90000);
+
+    });
 });
