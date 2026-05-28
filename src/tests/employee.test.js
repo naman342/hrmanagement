@@ -164,8 +164,45 @@ describe('Employee API', () => {
             .get('/employees/maxSalary')
             .query();
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.maxSalary).toBe(90000);
-});
+        expect(response.statusCode).toBe(200);
+        expect(response.body.maxSalary).toBe(90000);
+    });
+
+    test('GET /employees/maxSalary should return max salary with country filters', async () => {
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'A',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 50000
+            });
+
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'B',
+                jobTitle: 'SDE',
+                country: 'India',
+                salary: 90000
+            });
+        await request(app)
+            .post('/employees')
+            .send({
+                fullName: 'C',
+                jobTitle: 'SDE',
+                country: 'USA',
+                salary: 100000
+        });
+
+        const response = await request(app)
+            .get('/employees/maxSalary')
+            .query();
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body.maxSalary).toBe(90000);
+    });
+
 });
 
