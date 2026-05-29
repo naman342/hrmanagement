@@ -28,9 +28,11 @@ Setup
         TEST_DB_NAME=hr_management_test
     npm install
     create both databases
-    npm run seed:createTables
-    npm run seed:createTableForTest"
+    npm run seed:createTable
+    npm run seed:createTableForTest
+    npm run dev
 
+Backend Is running on Port 3000
 
 
 For more details use link : https://docs.google.com/document/d/1hHp0qdb5UWLrF66MHfik8TNvL13EiyZoONZ5OLa5euU/edit?tab=t.0
