@@ -24,7 +24,9 @@ async function ensureReferenceData() {
       `INSERT INTO job_titles (title, code) VALUES
        ('Software Engineer', 'SDE'),
        ('Senior Software Engineer', 'SSE'),
-       ('QA Engineer', 'QA')`
+       ('QA Engineer', 'QA'),
+       ('Product Manager', 'PM'),
+       ('Human Resource', 'HR')`
     );
     console.log('Inserted default job titles.');
   }
@@ -78,8 +80,8 @@ async function seedEmployees() {
       placeholders.push('(?, ?, ?, ?)');
       values.push(
         `Employee ${n}`,
-        jobIds[n % jobIds.length],
-        countryIds[n % countryIds.length],
+        jobIds[(n*11) % jobIds.length],
+        countryIds[(n*19) % countryIds.length],
         30000 + (n % 970000)
       );
     }
