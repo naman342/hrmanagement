@@ -532,3 +532,13 @@ describe('Employee API', () => {
     
 });
 
+describe('MetaData API',()=>{
+   
+
+   test('GET /metaData/getjobTitles should return Jobtiltes', async () => {
+    const res = await request(app).get("/metaData/getjobTitles");
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+
+});
+})
