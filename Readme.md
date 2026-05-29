@@ -30,6 +30,7 @@ Setup
     create both databases
     npm run seed:createTable
     npm run seed:createTableForTest
+    npm run seed:employees
     npm run dev
 
 Backend Is running on Port 3000
