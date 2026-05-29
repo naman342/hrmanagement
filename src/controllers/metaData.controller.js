@@ -1,3 +1,11 @@
+const {
+    jobTitleSchema
+} = require('../validators/metaData.validator');
+
+const {
+    createJobTilleService
+} = require('../services/metaData.service');
+
 async function getjobTitles(req, res) {
 
     const result = [
@@ -26,6 +34,24 @@ async function getjobTitles(req, res) {
  return res.status(200).json(result);
 
 }
+async function createJobTitles(req, res) {
+    const { error } =
+            jobTitleSchema.validate(req.body);
+
+        if (error) {
+            let message =
+                error.details[0].message;
+
+            return res.status(400).json({
+                message
+            });
+
+        }
+
+    const employee = await createJobTilleService(req.body);
+    res.status(201).json(employee);
+
+}
 
 async function getCountryNames(req, res) {
 
@@ -52,5 +78,6 @@ async function getCountryNames(req, res) {
 
 module.exports = {
    getjobTitles,
+   createJobTitles,
    getCountryNames
 };
