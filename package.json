@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "NODE_ENV=test jest",
     "seed:employees": "node scripts/seedEmployees.js",
-    "seed:createTable": "node scripts/createTables.js"
+    "seed:createTable": "node scripts/createTables.js",
+    "seed:createTableForTest": "NODE_ENV=test node scripts/createTables.js"
   },
   "keywords": [],
   "author": "",
