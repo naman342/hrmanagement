@@ -27,6 +27,30 @@ async function getjobTitles(req, res) {
 
 }
 
+async function getCountryNames(req, res) {
+
+    const result = [
+        {
+            "title": "India",
+            "code": "INR",
+            "id": 1,
+        },
+        {
+            "title": "United States of America",
+            "code": "USA",
+            "id": 2,
+        },
+        {
+            "title": "Germany",
+            "code": "EUR",
+            "id": 3,
+        }
+    ]
+ return res.status(200).json(result);
+
+}
+
 module.exports = {
-   getjobTitles
+   getjobTitles,
+   getCountryNames
 };
