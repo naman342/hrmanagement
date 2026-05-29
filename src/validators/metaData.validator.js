@@ -16,6 +16,23 @@ const jobTitleSchema = Joi.object({
     
 });
 
+const countryNameSchema = Joi.object({
+    name: Joi.string()
+    .required()
+    .messages({
+        'any.required': 'name is required',
+        'string.empty': 'Name is required'
+    }),
+
+    countryCode: Joi.string()
+        .required()
+        .messages({
+            'string.empty': 'Country Code is required'
+        }),
+    
+}); 
+
 module.exports = {
-    jobTitleSchema
+    jobTitleSchema,
+    countryNameSchema
 };

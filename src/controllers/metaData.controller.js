@@ -1,9 +1,11 @@
 const {
-    jobTitleSchema
+    jobTitleSchema,
+    countryNameSchema
 } = require('../validators/metaData.validator');
 
 const {
-    createJobTilleService
+    createJobTilleService,
+    createCountryNameService
 } = require('../services/metaData.service');
 
 async function getjobTitles(req, res) {
@@ -34,6 +36,7 @@ async function getjobTitles(req, res) {
  return res.status(200).json(result);
 
 }
+
 async function createJobTitles(req, res) {
     const { error } =
             jobTitleSchema.validate(req.body);
@@ -76,8 +79,30 @@ async function getCountryNames(req, res) {
 
 }
 
+async function createCountryNames(req, res) {
+    const { error } =
+            countryNameSchema.validate(req.body);
+
+        if (error) {
+            let message =
+                error.details[0].message;
+
+            return res.status(400).json({
+                message
+            });
+
+        }
+
+    const employee = await createCountryNameService(req.body);
+
+    res.status(201).json(employee);
+}
+    
+
+
 module.exports = {
    getjobTitles,
    createJobTitles,
-   getCountryNames
+   getCountryNames,
+   createCountryNames
 };

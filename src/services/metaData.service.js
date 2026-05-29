@@ -19,6 +19,24 @@ async function createJobTilleService(data) {
   };
 }
 
+async function createCountryNameService(data) {
+    const {
+        name,
+        countryCode
+    } = data;
+    const [result] = await pool.execute(
+    "INSERT INTO countries (name, countryCode) VALUES (?, ?)",
+    [name, countryCode]
+  );
+
+  return {
+    id: result.insertId,
+    name,
+    countryCode,
+  };
+}
+
 module.exports = {
-    createJobTilleService
+    createJobTilleService,
+    createCountryNameService
 };

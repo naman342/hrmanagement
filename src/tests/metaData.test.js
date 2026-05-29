@@ -8,7 +8,8 @@ describe('MetaData API',()=>{
    
     beforeEach(async () => {
     await pool.execute("DELETE FROM job_titles");
-    });
+    await pool.execute("DELETE FROM countries");
+    }); 
 
     afterAll(async () => {
     await pool.end();
@@ -43,5 +44,17 @@ describe('MetaData API',()=>{
         expect(response.body.code).toBe("SDE");
     });
 
+    test('POST /metaData/createCountryNames should create a country name', async () => {
+        const response = await request(app)
+            .post("/metaData/createCountryNames")
+            .send({
+                name: "India",
+                countryCode: "IN",
+            });
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty("id");
+        expect(response.body.name).toBe("India");
+        expect(response.body.countryCode).toBe("IN");
+    });
 
 })

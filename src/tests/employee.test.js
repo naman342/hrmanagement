@@ -520,7 +520,6 @@ describe('Employee API', () => {
     test('GET /employees/:id should return 404 if employee not found', async () =>{
 
         const id = Date.now() + 99999
-        console.log("id test", id)
         const response = await request(app)
             .get(`/employees/${id}`);
         expect(response.statusCode).toBe(404);
