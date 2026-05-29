@@ -5,15 +5,6 @@ const app = require('../../app')
 const { pool } = require('../config/mysql.connection');
 
 describe('MetaData API',()=>{
-   
-    beforeEach(async () => {
-    await pool.execute("DELETE FROM job_titles");
-    await pool.execute("DELETE FROM countries");
-    }); 
-
-    afterAll(async () => {
-    await pool.end();
-    });
 
    test('GET /metaData/getjobTitles should return Jobtiltes', async () => {
         const res = await request(app).get("/metaData/getjobTitles");
@@ -34,27 +25,27 @@ describe('MetaData API',()=>{
             .post("/metaData/createJobTitles")
             .send({
             title: "Software developer",
-            code: "SDE",
+            code: "META_SDE",
             });
 
         expect(response.statusCode).toBe(201);
 
         expect(response.body).toHaveProperty("id");
         expect(response.body.title).toBe("Software developer");
-        expect(response.body.code).toBe("SDE");
+        expect(response.body.code).toBe("META_SDE");
     });
 
     test('POST /metaData/createCountryNames should create a country name', async () => {
         const response = await request(app)
             .post("/metaData/createCountryNames")
             .send({
-                name: "India",
-                countryCode: "IN",
+                name: "Meta Test Country",
+                countryCode: "MTC",
             });
         expect(response.statusCode).toBe(201);
         expect(response.body).toHaveProperty("id");
-        expect(response.body.name).toBe("India");
-        expect(response.body.countryCode).toBe("IN");
+        expect(response.body.name).toBe("Meta Test Country");
+        expect(response.body.countryCode).toBe("MTC");
     });
 
 })

@@ -4,15 +4,56 @@ const request = require('supertest');
 const app = require('../../app')
 const { pool } = require('../config/mysql.connection');
 
+let jobTitleId;
+let jobSdetTitleId;
+let countryId;
+let countryUSAId;
+
+async function seedReferenceData() {
+    await pool.execute('DELETE FROM employees');
+    await pool.execute('DELETE FROM job_titles');
+    await pool.execute('DELETE FROM countries');
+
+    const [job] = await pool.execute(
+        'INSERT INTO job_titles (title, code) VALUES (?, ?)',
+        ['Software Engineer', 'SDE']
+    );
+    jobTitleId = job.insertId;
+
+    const [job2] = await pool.execute(
+        'INSERT INTO job_titles (title, code) VALUES (?, ?)',
+        ['Software Developer Tester', 'SDET']
+    );
+    jobSdetTitleId = job2.insertId;
+
+    const [country] = await pool.execute(
+        'INSERT INTO countries (name, countryCode) VALUES (?, ?)',
+        ['India', 'IN']
+    );
+    countryId = country.insertId;
+
+    const [country2] = await pool.execute(
+        'INSERT INTO countries (name, countryCode) VALUES (?, ?)',
+        ['United States of America', 'USA']
+    );
+    countryUSAId = country2.insertId;
+}
+
 describe('Employee API', () => {
 
-    beforeEach(async () => {
-        await pool.execute(
-            'DELETE FROM employees'
-        );
+    beforeAll(async () => {
+        await seedReferenceData();
+    });
 
+    beforeEach(async () => {
+        await pool.execute('DELETE FROM employees');
     });
     afterAll(async () => {
+         await pool.execute(
+            'DELETE FROM employees'
+        );
+        await pool.execute("DELETE FROM job_titles");
+        await pool.execute("DELETE FROM countries");
 
         await pool.end();
 
@@ -22,14 +63,12 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'Naman',
-                jobTitle: 'Software Engineer',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
-
         const response =
             await request(app).get('/employees/getAllEmployees');
-
         expect(response.statusCode).toBe(200);
 
         expect(response.body.length)
@@ -45,8 +84,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'Naman',
-                jobTitle: 'Software Engineer',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -59,8 +98,8 @@ describe('Employee API', () => {
         const response = await request(app)
             .post('/employees')
             .send({
-                jobTitle: 'Software Engineer',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -77,8 +116,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'Naman',
-                jobTitle: 'Software Engineer',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: -100
             });
 
@@ -94,8 +133,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'Naman',
-                jobTitle: 'Software Engineer',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -122,8 +161,8 @@ describe('Employee API', () => {
         .post('/employees')
         .send({
             fullName: 'Naman',
-            jobTitle: 'SDE',
-            country: 'India',
+            jobTitle: jobTitleId,
+            country: countryId,
             salary: 50000
         });
 
@@ -145,8 +184,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -154,16 +193,16 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 90000
             });
         await request(app)
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 100000
         });
 
@@ -181,8 +220,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -190,23 +229,23 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 90000
             });
         await request(app)
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 100000
         });
 
         const response = await request(app)
             .get('/employees/maxSalary')
             .query({
-                country: 'INDIA'
+                country: countryId
             });
 
         expect(response.statusCode).toBe(200);
@@ -219,8 +258,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -228,8 +267,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 90000
             });
 
@@ -237,15 +276,15 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDET',
-                country: 'India',
+                jobTitle: jobSdetTitleId,
+                country: countryId,
                 salary: 100000
             });
 
         const response = await request(app)
             .get('/employees/maxSalary')
             .query({
-                jobTitle: 'SDE'
+                jobTitle: jobTitleId
             });
 
         expect(response.statusCode).toBe(200);
@@ -257,8 +296,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -266,8 +305,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 90000
             });
 
@@ -275,16 +314,16 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDET',
-                country: 'India',
+                jobTitle: jobSdetTitleId,
+                country: countryId,
                 salary: 100000
             });
 
         const response = await request(app)
             .get('/employees/maxSalary')
             .query({
-                country: 'India',
-                jobTitle: 'SDE'
+                country: countryId,
+                jobTitle: jobTitleId
             });
 
         expect(response.statusCode).toBe(200);
@@ -297,8 +336,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -306,16 +345,16 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 90000
             });
         await request(app)
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 100000
         });
 
@@ -332,8 +371,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
             });
 
@@ -341,31 +380,31 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 90000
             });
         await request(app)
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 100000
         });
         await request(app)
             .post('/employees')
             .send({
                 fullName: 'D',
-                jobTitle: 'SDET',
-                country: 'INDIA',
+                jobTitle: jobSdetTitleId,
+                country: countryId,
                 salary: 40000
             });
 
         const response = await request(app)
             .get('/employees/minSalary')
             .query({
-                country: 'INDIA'
+                country: countryId
             });
 
         expect(response.statusCode).toBe(200);
@@ -378,8 +417,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 30000
             });
 
@@ -387,16 +426,16 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 90000
             });
          await request(app)
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDET',
-                country: 'USA',
+                jobTitle: jobSdetTitleId,
+                country: countryUSAId,
                 salary: 40000
             });
 
@@ -404,15 +443,15 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDET',
-                country: 'India',
+                jobTitle: jobSdetTitleId,
+                country: countryId,
                 salary: 100000
             });
 
         const response = await request(app)
             .get('/employees/minSalary')
             .query({
-                jobTitle: 'SDE'
+                jobTitle: jobTitleId
             });
 
         expect(response.statusCode).toBe(200);
@@ -424,8 +463,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'A',
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 20000
             });
 
@@ -433,8 +472,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'B',
-                jobTitle: 'SDE',
-                country: 'USA',
+                jobTitle: jobTitleId,
+                country: countryUSAId,
                 salary: 90000
             });
 
@@ -442,24 +481,24 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'C',
-                jobTitle: 'SDET',
-                country: 'India',
+                jobTitle: jobSdetTitleId,
+                country: countryId,
                 salary: 100000
             });
         await request(app)
             .post('/employees')
             .send({
                 fullName: 'D',
-                jobTitle: 'SDET',
-                country: 'India',
+                jobTitle: jobSdetTitleId,
+                country: countryId,
                 salary: 30000
             });
 
         const response = await request(app)
             .get('/employees/minSalary')
             .query({
-                country: 'India',
-                jobTitle: 'SDE'
+                country: countryId,
+                jobTitle: jobTitleId
             });
 
         expect(response.statusCode).toBe(200);
@@ -474,8 +513,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: `User${i}`,
-                jobTitle: 'SDE',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000 + i
             });
     }
@@ -497,8 +536,8 @@ describe('Employee API', () => {
             .post('/employees')
             .send({
                 fullName: 'Shreyansh',
-                jobTitle: 'Software Engineer',
-                country: 'India',
+                jobTitle: jobTitleId,
+                country: countryId,
                 salary: 50000
         });
 
@@ -513,8 +552,8 @@ describe('Employee API', () => {
         expect(response.body.fullName)
             .toBe('Shreyansh');
         expect(response.body.salary).toBe(50000);
-        expect(response.body.country).toBe('India');
-        expect(response.body.jobTitle).toBe('Software Engineer');
+        expect(response.body.country).toBe(countryId);
+        expect(response.body.jobTitle).toBe(jobTitleId);
     })
 
     test('GET /employees/:id should return 404 if employee not found', async () =>{

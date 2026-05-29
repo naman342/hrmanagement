@@ -18,10 +18,12 @@ async function createEmployeeService(data) {
         `,
         [fullName, jobTitle, country, salary]
     );
-
     return {
         id: result.insertId,
-        ...result
+        fullName,
+        jobTitle,
+        country,
+        salary
     };
 }
 

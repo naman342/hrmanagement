@@ -8,16 +8,18 @@ const employeeSchema = Joi.object({
         'string.empty': 'Full name is required'
     }),
 
-    jobTitle: Joi.string()
+    jobTitle: Joi.number()
+        .positive()
         .required()
         .messages({
-            'string.empty': 'Job title is required'
+            'any.required': 'Job title is required'
         }),
 
-    country: Joi.string()
+    country: Joi.number()
+        .positive()
         .required()
         .messages({
-            'string.empty': 'Country is required'
+            'any.required': 'Country is required'
         }),
 
     salary: Joi.number()
