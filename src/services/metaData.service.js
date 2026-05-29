@@ -19,6 +19,14 @@ async function createJobTilleService(data) {
   };
 }
 
+async function getJobTitlesService() {
+  const [rows] = await pool.execute(
+    "SELECT id, title, code FROM job_titles LIMIT 20"
+  );
+
+  return rows;
+}
+
 async function createCountryNameService(data) {
     const {
         name,
@@ -36,7 +44,16 @@ async function createCountryNameService(data) {
   };
 }
 
+async function getCountryNameService() {
+  const [rows] = await pool.execute(
+    "SELECT id, name, countryCode FROM countries LIMIT 20"
+  );
+
+  return rows;
+}
 module.exports = {
     createJobTilleService,
-    createCountryNameService
+    getJobTitlesService,
+    createCountryNameService,
+    getCountryNameService
 };
